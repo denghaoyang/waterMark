@@ -28,4 +28,13 @@ class Base extends Controller
         }
         return $data;
     }
+
+
+    function unicodeDecode($unicode_str){
+        $json = '{"str":"'.$unicode_str.'"}';
+        $arr = json_decode($json,true);
+        if(empty($arr)) return '';
+        return $arr['str'];
+    }
+
 }

@@ -35,52 +35,19 @@
                                 <th>嵌入日期</th>
                                 <th>节点</th>
                                 <th>提取内容</th>
-                                <th>数据类型</th>
-                                <th>嵌入状态</th>
-                                <th>文件大小</th>
                             </tr>
                             </thead>
                             <tbody>
+                            {foreach $list as $key=>$value}
                             <tr>
-                                <td>1</td>
-                                <td>Blank.jpg</td>
-                                <td>2017-08-03</td>
-                                <td>上海市</td>
-                                <td>Blank</td>
-                                <td>标准数据</td>
-                                <td>嵌入失败</td>
-                                <td>800KB</td>
+                                <td>{$key+1}</td>
+                                <td>{$value.guid}</td>
+                                <td>{$value.embedTime}</td>
+                                <td>{$value.nodeName}</td>
+                                <td>{$value.userName}</td>
+                                <td>{$value.watermarkContent}</td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Blank.jpg</td>
-                                <td>2017-08-03</td>
-                                <td>上海市</td>
-                                <td>Blank</td>
-                                <td>标准数据</td>
-                                <td>嵌入失败</td>
-                                <td>800KB</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Blank.jpg</td>
-                                <td>2017-08-03</td>
-                                <td>上海市</td>
-                                <td>Blank</td>
-                                <td>标准数据</td>
-                                <td>嵌入失败</td>
-                                <td>800KB</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>Blank.jpg</td>
-                                <td>2017-08-03</td>
-                                <td>上海市</td>
-                                <td>Blank</td>
-                                <td>标准数据</td>
-                                <td>嵌入失败</td>
-                                <td>800KB</td>
-                            </tr>
+                            {/foreach}
                             </tbody>
                         </table>
                     </div>

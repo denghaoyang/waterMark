@@ -3,7 +3,7 @@ namespace app\index\controller;
 use think\Controller;
 use app\index\controller\Base;
 
-use app\index\model\IndexModel;
+use app\index\model\RecordModel;
 
 
 class Index extends Base
@@ -14,7 +14,12 @@ class Index extends Base
 
     //水印嵌入记录
     public function inList(){
-        $this->view->engine->layout(true);
+        $recordModel = new RecordModel();
+
+        $list = $recordModel->getInList();
+
+        $this->assign("list",$list);
+
         return  $this->fetch("inList");
     }
 
