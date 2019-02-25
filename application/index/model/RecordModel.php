@@ -16,10 +16,14 @@ class RecordModel extends Model
     protected $table = 'wt_record';
 
     public function getListByFileId($fileId){
+<<<<<<< HEAD
         return $this
             ->where("fileGuid",$fileId)
             ->field("guid,fileGuid,embedTime,sourceNodeGuid,destNodeGuid,userGuid,watermarkIndex,watermarkContent,remark")
             ->select();
+=======
+        return $this->where("fileGuid",$fileId)->field("addtime",true)->select();
+>>>>>>> e542abea1c6012369bad76c831fe9f14607a1f1f
     }
 
     public function saveList($data){

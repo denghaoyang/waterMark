@@ -4,8 +4,12 @@ use think\Controller;
 use app\index\controller\Base;
 
 use app\index\model\RecordModel;
+<<<<<<< HEAD
 use app\index\model\UserModel;
 use think\Session;
+=======
+
+>>>>>>> e542abea1c6012369bad76c831fe9f14607a1f1f
 
 class Index extends Base
 {

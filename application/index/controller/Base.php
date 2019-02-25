@@ -38,6 +38,7 @@ class Base extends Controller
         return $data;
     }
 
+<<<<<<< HEAD
     public function changeIntToString(&$data) {
         if (is_array($data)) {
             foreach ($data as &$val) {
@@ -56,6 +57,8 @@ class Base extends Controller
         }
         return $data;
     }
+=======
+>>>>>>> e542abea1c6012369bad76c831fe9f14607a1f1f
 
     function unicodeDecode($unicode_str){
         $json = '{"str":"'.$unicode_str.'"}';
