@@ -1,0 +1,71 @@
+<!-- Sweet Alert -->
+<link href="/static/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+<div style="margin-top: 80px">
+<div class="col-md-3">
+
+</div>
+<div class="col-md-6">
+    <div class="ibox-content">
+            <div class="form-group">
+                <label>旧密码</label>
+                <input type="password" class="form-control" placeholder="请输入旧密码" required="" id="oldPwd">
+            </div>
+            <div class="form-group">
+                <label>新密码</label>
+                <input type="password" class="form-control" placeholder="请输入新密码" required="" id="newPwd">
+            </div>
+            <div class="form-group">
+                <label>确认密码</label>
+                <input type="password" class="form-control" placeholder="请输入确认密码" required="" id="repeatPwd">
+            </div>
+            <button class="btn btn-primary block full-width m-b" onclick="changePwd()">提交</button>
+    </div>
+</div>
+<div class="col-md-3">
+
+</div>
+</div>
+<script src="/static/js/md5.js"></script>
+<script src="/static/js/plugins/sweetalert/sweetalert.min.js"></script>
+<script type="text/javascript">
+    function changePwd() {
+        var oldPwd = $("#oldPwd").val();
+        var newPwd = $("#newPwd").val();
+        var repeatPwd = $("#repeatPwd").val();
+
+        if (oldPwd==''){
+            swal({
+                title: "旧密码不能为空"
+            });
+        }else if(newPwd==''){
+            swal({
+                title: "请输入新密码"
+            });
+        }else if(repeatPwd==''){
+            swal({
+                title: "请输入确认密码"
+            });
+        }else if(newPwd!=repeatPwd){
+            swal({
+                title: "新密码与确认密码不符"
+            });
+        }else{
+            oldPwd = hex_md5(oldPwd);
+            newPwd = hex_md5(newPwd);
+            $.get("/index/index/doChangePwd?oldPwd="+oldPwd+"&newPwd="+newPwd, function(data){
+                if (data.code){
+                    swal({
+                        title: "修改密码成功",
+                        type: "success"
+                    },function(){
+                        window.location.href = "/index/index/index";
+                    });
+                }else{
+                    swal({
+                        title: data.msg
+                    });
+                }
+            });
+        }
+    }
+</script>

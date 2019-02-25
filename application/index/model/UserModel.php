@@ -17,4 +17,8 @@ class UserModel extends Model{
     public function checkUsernameAndPwd($userName,$pwd){
         return $this->where(['username'=>$userName,'pwd'=>$pwd,'is_del'=>0])->find();
     }
+
+    public function changePwd($pwd,$id){
+        return $this->isUpdate(true)->save(['pwd'=>$pwd],['id'=>$id]);
+    }
 }

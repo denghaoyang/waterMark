@@ -16,27 +16,35 @@ class RecordModel extends Model
     protected $table = 'wt_record';
 
     public function getListByFileId($fileId){
-<<<<<<< HEAD
+
         return $this
             ->where("fileGuid",$fileId)
             ->field("guid,fileGuid,embedTime,sourceNodeGuid,destNodeGuid,userGuid,watermarkIndex,watermarkContent,remark")
             ->select();
-=======
-        return $this->where("fileGuid",$fileId)->field("addtime",true)->select();
->>>>>>> e542abea1c6012369bad76c831fe9f14607a1f1f
     }
 
     public function saveList($data){
         return $this->save($data);
     }
 
-    public function getInList(){
+    public function getInList($startTime,$endTime,$fileGuid){
+        $map = [];
+        if ($startTime){
+            $map['r.embedTime'] = ['gt',$startTime];
+        }
+        if ($endTime){
+           $map['r.embedTime'] = ['lt',$endTime];
+        }
+        if($fileGuid){
+            $map['r.fileGuid'] = (int)$fileGuid;
+        }
         return $this->alias("r")
                     ->join("wt_node n","r.sourceNodeGuid = n.guid")
+                    ->join("wt_node n1","r.destNodeGuid = n1.guid")
                     ->join("wt_user u","r.userGuid = u.guid")
-                    ->field("r.guid,r.embedTime,n.name as nodeName,u.name as userName,r.watermarkContent,r.addtime")
+                    ->field("r.guid,r.embedTime,n.name as sourceNodeName,n1.name as destNodeName,u.name as userName,r.watermarkContent,r.watermarkIndex,r.remark,r.addtime")
                     ->order("addtime desc")
-                    ->where(['n.is_del'=>0])
-                    ->select();
+                    ->where($map)
+                    ->paginate(10);
     }
 }
