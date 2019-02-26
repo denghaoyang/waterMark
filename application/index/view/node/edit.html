@@ -1,7 +1,8 @@
 <div class="ibox float-e-margins">
     <div class="ibox-content">
         <div class="row">
-            <div>
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
                 <h3 class="m-t-none m-b">添加节点</h3>
                 <form role="form" enctype="multipart/form-data" action="/index/node/doEdit" method="post">
                     <input type="hidden" name="id" value="{$info.id}"/>
@@ -13,6 +14,30 @@
                     </div>
                 </form>
             </div>
+            <div class="col-lg-3"></div>
         </div>
     </div>
 </div>
+<script src="/static/js/jquery-2.1.1.js"></script>
+<script src="/static/js/plugins/validate/jquery.validate.min.js"></script>
+<script>aaa=jQuery;</script>
+<script>
+    $(document).ready(function(){
+        aaa("#form").validate({
+            rules: {
+                name: {
+                    required: true,
+                    minlength: 3
+                },
+                username: {
+                    required: true,
+                    minlength: 6
+                },
+                guid: {
+                    required: true,
+                    number: true
+                }
+            }
+        });
+    });
+</script>

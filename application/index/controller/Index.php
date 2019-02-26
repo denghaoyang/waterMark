@@ -4,7 +4,7 @@ use think\Controller;
 use app\index\controller\Base;
 
 use app\index\model\RecordModel;
-
+use app\index\model\RecordLogModel;
 use app\index\model\UserModel;
 use think\Session;
 
@@ -21,12 +21,22 @@ class Index extends Base
         $list = $recordModel->getInList($startTime,$endTime,$fileGuid);
 
         $this->assign("list",$list);
-
+        $this->assign("startTime",$startTime);
+        $this->assign("endTime",$endTime);
+        $this->assign("fileGuid",$fileGuid);
         return  $this->fetch("inList");
     }
 
     //水印导出记录
-    public function outList(){
+    public function outList($startTime=null,$endTime=null,$fileGuid=null){
+        $recordLogModel = new RecordLogModel();
+
+        $list = $recordLogModel->getOutList($startTime,$endTime,$fileGuid);
+
+        $this->assign("list",$list);
+        $this->assign("startTime",$startTime);
+        $this->assign("endTime",$endTime);
+        $this->assign("fileGuid",$fileGuid);
         return  $this->fetch("outList");
     }
 
@@ -49,4 +59,53 @@ class Index extends Base
             }
         }
     }
+
+    public function tableGraph($fileGuid){
+        $recordModel = new RecordModel();
+        //获取文件的节点信息
+        $list = $recordModel->getNodeInfo($fileGuid);
+
+        //拼接vis.js的配置参数
+        $nodes = [];
+        $edges = [];
+        //整理出节点数据与路线数据
+        foreach($list as $key=>$value){
+            $sourceNode = ['label'=>$value['sourceNodeName'],'id'=>$value['sourceNodeGuid'],'x'=>0,'y'=>0,'shape'=>'box'];
+            if (!in_array($sourceNode,$nodes)){
+                $nodes[] = $sourceNode;
+            }
+            $destNode = ['label'=>$value['destNodeName'],'id'=>$value['destNodeGuid'],'x'=>0,'y'=>0,'shape'=>'box'];
+            if (!in_array($destNode,$nodes)){
+                $nodes[] = $destNode;
+            }
+            $edges[$key]['label'] = $key+1;
+            $edges[$key]['from'] = $value['sourceNodeGuid'];
+            $edges[$key]['to'] = $value['destNodeGuid'];
+            $edges[$key]['style'] = 'arrow';
+        }
+        //设置节点配置信息
+        foreach ($nodes as $key=>&$value){
+            if ($key==0){
+                $value['color'] = 'red';
+            }else{
+                if($key%2){
+                    $this->addTotal($nodes,'x',$key);
+                }else{
+                    $this->addTotal($nodes,'y',$key);
+                }
+            }
+        }
+        $this->assign("nodes",json_encode($nodes));
+        $this->assign("edges",json_encode($edges));
+        return $this->fetch("tablegraph");
+    }
+
+    private function addTotal(&$data,$coordinate,$key){
+        foreach ($data as $k=>&$value){
+            if ($key<=$k){
+                $value[$coordinate] += 200;
+            }
+        }
+    }
+
 }

@@ -1,0 +1,46 @@
+<link href="/static/vs/vis.css" rel="stylesheet">
+<script type="text/javascript" src="/static/vs/vis.js"></script>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="ibox float-e-margins" >
+            <div class="ibox-title" style="">
+                <h5>文件节点流转图</h5>
+            </div>
+            <div class="ibox-content" id="mygraph" style="height: 500px">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    // create an array with nodes
+//    var nodes = [
+//        {id: 1, label: '北京',color: 'red',x: 0, y: 0,shape	:"box"},
+//        {id: 2, label: '天津',x: 0, y: 200,shape	:"box"},
+//        {id: 3, label: '津南',x: 200, y: 0,shape	:"box"},
+//        {id: 4, label: '宝坻',x: 200, y: 200,shape	:"box"},
+//        {id: 5, label: '廊坊',x: 200, y: 400,shape	:"box"}
+//    ];
+    var nodes = {$nodes};
+
+    // create an array with edges
+//    var edges = [
+//        {from: 1, to: 2,style: 'arrow',label:'1'},
+//        {from: 1, to: 3,style: 'arrow',label:'21'},
+//        {from: 2, to: 4,style: 'arrow',label:'3'},
+//        {from: 2, to: 5,style: 'arrow',label:'4'}
+//    ];
+    var edges = {$edges};
+
+    // create a graph
+    var container = document.getElementById('mygraph');
+    var data= {
+        nodes: nodes,
+        edges: edges,
+    };
+    var options = {
+        height: '400px'
+    };
+    var graph = new vis.Graph(container, data, options);
+</script>

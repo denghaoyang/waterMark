@@ -15,15 +15,15 @@
                             <label>嵌入时间范围</label>
                             <div class="form-group" id="data_5">
                                 <div class="input-daterange input-group" id="datepicker">
-                                    <input type="text" autocomplete="off" class="input-sm form-control" name="startTime"/>
+                                    <input type="text" autocomplete="off" class="input-sm form-control" name="startTime" value="{$startTime}"/>
                                     <span class="input-group-addon">to</span>
-                                    <input type="text" autocomplete="off" class="input-sm form-control" name="endTime" />
+                                    <input type="text" autocomplete="off" class="input-sm form-control" name="endTime" value="{$endTime}"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <label>文件(FileGUID)</label>
-                            <div class="input-group"><input type="text" placeholder="文件编号" class="input-sm form-control" name="fileGuid">
+                            <div class="input-group"><input type="text" placeholder="文件编号" class="input-sm form-control" name="fileGuid" value="{$fileGuid}">
                             </div>
                         </div>
                         <br>
@@ -49,7 +49,7 @@
                             <tr>
                                 <td>{$key+1}</td>
                                 <td>{$value.embedTime}</td>
-                                <td>{$value.guid}</td>
+                                <td><a href="/index/index/tableGraph?fileGuid={$value.fileGuid}">{$value.fileGuid}</a></td>
                                 <td>{$value.sourceNodeName}</td>
                                 <td>{$value.destNodeName}</td>
                                 <td>{$value.userName}</td>
@@ -62,7 +62,7 @@
                         </table>
                         {$list->render()}
                     </div>
-
+                    </form>
                 </div>
             </div>
         </div>

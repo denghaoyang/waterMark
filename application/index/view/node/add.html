@@ -1,17 +1,47 @@
+
 <div class="ibox float-e-margins">
     <div class="ibox-content">
         <div class="row">
-            <div>
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
                 <h3 class="m-t-none m-b">添加节点</h3>
-                <form role="form" enctype="multipart/form-data" action="/index/node/doAdd" method="post">
+                <form role="form" id="form" enctype="multipart/form-data" action="/index/node/doAdd" method="post">
                     <div class="form-group"><label>节点名称</label> <input type="text" placeholder="请输入节点名称" class="form-control" name="name"></div>
+                    <div class="form-group"><label>节点编号(作为自动生成的用户名)</label> <input type="text" placeholder="请输入节点编号" class="form-control" name="username"></div>
                     <div class="form-group"><label>节点Guid</label> <input type="text" placeholder="请输入节点Guid" class="form-control" name="guid"></div>
                     <div class="form-group"><label>节点类型</label> <input type="text" placeholder="请输入节点类型" class="form-control" name="type"></div>
+
                     <div>
                         <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>提交</strong></button>
                     </div>
                 </form>
             </div>
+            <div class="col-lg-3"></div>
         </div>
     </div>
 </div>
+<!-- Jquery Validate -->
+
+<script src="/static/js/jquery-2.1.1.js"></script>
+<script src="/static/js/plugins/validate/jquery.validate.min.js"></script>
+<script>aaa=jQuery;</script>
+<script>
+    $(document).ready(function(){
+        aaa("#form").validate({
+            rules: {
+                name: {
+                    required: true,
+                    minlength: 3
+                },
+                username: {
+                    required: true,
+                    minlength: 6
+                },
+                guid: {
+                    required: true,
+                    number: true
+                }
+            }
+        });
+    });
+</script>

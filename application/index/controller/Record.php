@@ -1,12 +1,11 @@
 <?php
 namespace app\index\controller;
 use think\Controller;
-use app\index\controller\Base;
 
 use app\index\model\RecordModel;
 use app\index\model\RecordLogModel;
 
-class Record extends Base
+class Record extends Controller
 {
     public function index(){
         return $this->fetch();
@@ -106,11 +105,57 @@ class Record extends Base
                 $result['data'] = [];
             }else{
                 $result['status'] = 0;
-                $result['msg'] = "水印嵌入失败";
+                $result['msg'] = $recordModel->getError();
                 $result['data'] = [];
             }
         }
 
         return json_encode($result);
+    }
+
+    public function changeNullTo(&$data) {
+        if (is_array($data)) {
+            foreach ($data as &$val) {
+                if (is_array($val) || is_object($val)) {
+                    $val = is_object($val)?$val->toArray():$val;
+                    $this->changeNullTo($val);
+                } else {
+                    if (is_null($val)) {
+                        $val = "";
+                    }
+                }
+            }
+        } else {
+            if($data == null) {
+                $data = "";
+            }
+        }
+        return $data;
+    }
+
+    public function changeIntToString(&$data) {
+        if (is_array($data)) {
+            foreach ($data as &$val) {
+                if (is_array($val)) {
+                    $this->changeIntToString($val);
+                } else {
+                    if(is_int($val)) {
+                        $val = strval($val);
+                    }
+                }
+            }
+        } else {
+            if(is_int($data)) {
+                $data = strval($data);
+            }
+        }
+        return $data;
+    }
+
+    function unicodeDecode($unicode_str){
+        $json = '{"str":"'.$unicode_str.'"}';
+        $arr = json_decode($json,true);
+        if(empty($arr)) return '';
+        return $arr['str'];
     }
 }

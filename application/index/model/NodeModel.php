@@ -16,11 +16,18 @@ class NodeModel extends Model
     protected $table = 'wt_node';
 
     public function getList(){
-        return $this->where("is_del",0)->select();
+        return $this->where("is_del",0)->paginate(10);
     }
 
     public function saveList($data){
-        return $this->save($data);
+        return $this->allowField(true)->validate(
+            [
+                'guid'  => 'unique:wt_node'
+            ],
+            [
+                'guid.unique' => 'guid重复'
+            ]
+        )->save($data);
     }
 
     public function findList($id){

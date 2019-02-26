@@ -3,16 +3,12 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>水印嵌入</h5>
+                    <h2>节点管理</h2>
                 </div>
                 <div class="ibox-content">
                     <div class="row">
                         <div class="col-sm-5 m-b-xs">
                             <a class="btn btn-primary" href="/index/node/add">添加节点</a>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="input-group"><input type="text" placeholder="Search" class="input-sm form-control"> <span class="input-group-btn">
-                                        <button type="button" class="btn btn-sm btn-primary"> Go!</button> </span></div>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -40,7 +36,7 @@
                             </tbody>
                         </table>
                     </div>
-
+                    {$list->render()}
                 </div>
             </div>
         </div>

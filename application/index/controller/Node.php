@@ -6,6 +6,7 @@
  * Time: 下午 7:30
  */
 namespace app\index\controller;
+use app\index\model\UserModel;
 use think\Controller;
 use app\index\controller\Base;
 
@@ -29,14 +30,17 @@ class Node extends Base
 
     public function doAdd(){
         $nodeModel = new NodeModel();
+        $userModel = new UserModel();
         $data = input("post.");
 
-        $status = $nodeModel->saveList($data);
+        $addNodeStatus = $nodeModel->saveList($data);
+        //插入用户数据
+        $addUserStatus = $userModel->addUser($data);
 
-        if ($status !== FALSE){
+        if (($addNodeStatus !== FALSE)&&($addUserStatus !== FALSE)){
             return $this->success("添加成功","/index/node/index");
         }else{
-            return $this->error("添加失败");
+            return $this->error("添加失败,失败原因:".$nodeModel->getError());
         }
     }
 

@@ -1,93 +1,85 @@
+<link href="/static/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+<link href="/static/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
+
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>水印嵌入</h5>
+                    <h2>水印提取</h2>
                 </div>
                 <div class="ibox-content">
-                    <div class="row">
-                        <div class="col-sm-5 m-b-xs"><select class="input-sm form-control input-s-sm inline">
-                            <option value="0">Option 1</option>
-                            <option value="1">Option 2</option>
-                            <option value="2">Option 3</option>
-                            <option value="3">Option 4</option>
-                        </select>
-                        </div>
-                        <div class="col-sm-4 m-b-xs">
-                            <div data-toggle="buttons" class="btn-group">
-                                <label class="btn btn-sm btn-white"> <input type="radio" id="option1" name="options"> Day </label>
-                                <label class="btn btn-sm btn-white active"> <input type="radio" id="option2" name="options"> Week </label>
-                                <label class="btn btn-sm btn-white"> <input type="radio" id="option3" name="options"> Month </label>
+                    <form enctype="multipart/form-data" method="post" action="/index/index/outList">
+                        <div class="row">
+                            <div class="col-sm-3 m-b-xs">
+                                <label>提取时间范围</label>
+                                <div class="form-group" id="data_5">
+                                    <div class="input-daterange input-group" id="datepicker">
+                                        <input type="text" autocomplete="off" class="input-sm form-control" name="startTime" value="{$startTime}"/>
+                                        <span class="input-group-addon">to</span>
+                                        <input type="text" autocomplete="off" class="input-sm form-control" name="endTime"  value="{$endTime}"/>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="col-sm-2">
+                                <label>文件(FileGUID)</label>
+                                <div class="input-group"><input type="text" placeholder="文件编号" class="input-sm form-control" name="fileGuid"  value="{$fileGuid}">
+                                </div>
+                            </div>
+                            <br>
+                            <input type="submit" value="查询" class="btn btn-success">
                         </div>
-                        <div class="col-sm-3">
-                            <div class="input-group"><input type="text" placeholder="Search" class="input-sm form-control"> <span class="input-group-btn">
-                                        <button type="button" class="btn btn-sm btn-primary"> Go!</button> </span></div>
+                        <div class="table-responsive">
+                            <table class="table table-striped" >
+                                <thead>
+                                <tr>
+                                    <th>编号</th>
+                                    <th>提取日期</th>
+                                    <th>文件<br>(FileGUID)</th>
+                                    <th>源节点</th>
+                                    <th>目标节点</th>
+                                    <th>用户</th>
+                                    <th>水印编号</th>
+                                    <th>水印内容</th>
+                                    <th>备注</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {foreach $list as $key=>$value}
+                                <tr>
+                                    <td>{$key+1}</td>
+                                    <td>{:date("Y-m-d",$value.addtime)}</td>
+                                    <td><a href="/index/index/tableGraph?fileGuid={$value.guid}">{$value.guid}</a></td>
+                                    <td>{$value.sourceNodeName}</td>
+                                    <td>{$value.destNodeName}</td>
+                                    <td>{$value.userName}</td>
+                                    <td>{$value.watermarkIndex}</td>
+                                    <td>{$value.watermarkContent}</td>
+                                    <td>{$value.remark}</td>
+                                </tr>
+                                {/foreach}
+                                </tbody>
+                            </table>
+                            {$list->render()}
                         </div>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th>编号</th>
-                                <th>文件名</th>
-                                <th>嵌入日期</th>
-                                <th>节点</th>
-                                <th>提取内容</th>
-                                <th>数据类型</th>
-                                <th>嵌入状态</th>
-                                <th>文件大小</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Blank.jpg</td>
-                                <td>2017-08-03</td>
-                                <td>上海市</td>
-                                <td>Blank</td>
-                                <td>标准数据</td>
-                                <td>嵌入失败</td>
-                                <td>800KB</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Blank.jpg</td>
-                                <td>2017-08-03</td>
-                                <td>上海市</td>
-                                <td>Blank</td>
-                                <td>标准数据</td>
-                                <td>嵌入失败</td>
-                                <td>800KB</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Blank.jpg</td>
-                                <td>2017-08-03</td>
-                                <td>上海市</td>
-                                <td>Blank</td>
-                                <td>标准数据</td>
-                                <td>嵌入失败</td>
-                                <td>800KB</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>Blank.jpg</td>
-                                <td>2017-08-03</td>
-                                <td>上海市</td>
-                                <td>Blank</td>
-                                <td>标准数据</td>
-                                <td>嵌入失败</td>
-                                <td>800KB</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
+                    </form>
                 </div>
             </div>
         </div>
 
     </div>
 </div>
+<!-- jQuery UI -->
+<script src="/static/js/jquery-2.1.1.js"></script>
+<!-- Date range picker -->
+<script src="/static/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+<script src="/static/js/plugins/daterangepicker/daterangepicker.js"></script>
+
+<script type="text/javascript">
+    $('#data_5 .input-daterange').datepicker({
+        keyboardNavigation: false,
+        forceParse: false,
+        autoclose: true,
+        format: "yyyy-mm-dd"
+    });
+</script>
