@@ -52,34 +52,10 @@ class RecordModel extends Model
                     ->join("wt_node n","r.sourceNodeGuid = n.guid")
                     ->join("wt_node n1","r.destNodeGuid = n1.guid")
                     ->join("wt_user u","r.userGuid = u.guid")
-                    ->field("r.guid,r.fileGuid,r.embedTime,n.name as sourceNodeName,n1.name as destNodeName,u.name as userName,r.watermarkContent,r.watermarkIndex,r.remark,r.addtime")
+                    ->field("r.guid,r.fileGuid,r.embedTime,r.sourceNodeGuid,r.destNodeGuid,n.name as sourceNodeName,n1.name as destNodeName,u.name as userName,r.watermarkContent,r.watermarkIndex,r.remark,r.addtime")
                     ->order("addtime desc")
                     ->where($map)
                     ->paginate(10);
-    }
-
-    public function getOutList($startTime,$endTime,$fileGuid){
-        $map = [];
-        $map['n.is_del'] = 0;
-        $map['n1.is_del'] = 0;
-        if ($startTime){
-            $map['rl.embedTime'] = ['gt',$startTime];
-        }
-        if ($endTime){
-            $map['rl.embedTime'] = ['lt',$endTime];
-        }
-        if($fileGuid){
-            $map['r.fileGuid'] = (int)$fileGuid;
-        }
-        return $this->alias("r")
-            ->join("wt_record_log rl","rl.recordId=r.guid")
-            ->join("wt_node n","r.sourceNodeGuid = n.guid")
-            ->join("wt_node n1","r.destNodeGuid = n1.guid")
-            ->join("wt_user u","r.userGuid = u.guid")
-            ->field("r.guid,r.fileGuid,n.name as sourceNodeName,n1.name as destNodeName,u.name as userName,r.watermarkContent,r.watermarkIndex,r.remark,rl.addtime")
-            ->order("addtime desc")
-            ->where($map)
-            ->paginate(10,false,['query'=> ['startTime'=>$startTime,'endTime'=>$endTime,'fileGuid'=>$fileGuid]]);
     }
 
 
@@ -91,7 +67,8 @@ class RecordModel extends Model
         return $this->alias("r")
                     ->join("wt_node n","r.sourceNodeGuid = n.guid")
                     ->join("wt_node n1","r.destNodeGuid = n1.guid")
-                    ->field("n.name as sourceNodeName,n1.name as destNodeName,r.embedTime,r.sourceNodeGuid,r.destNodeGuid")
+                    ->join("wt_user u","r.userGuid = u.guid")
+                    ->field("n.name as sourceNodeName,n1.name as destNodeName,r.embedTime,r.sourceNodeGuid,r.destNodeGuid,u.name as userName,r.watermarkContent,r.watermarkIndex,r.remark")
                     ->order("embedTime")
                     ->where($map)
                     ->select();

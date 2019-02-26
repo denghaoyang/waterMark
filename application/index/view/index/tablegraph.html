@@ -4,10 +4,44 @@
     <div class="row">
         <div class="ibox float-e-margins" >
             <div class="ibox-title" style="">
-                <h5>文件节点流转图</h5>
+                <h2>文件节点流转记录</h2>
             </div>
-            <div class="ibox-content" id="mygraph" style="height: 500px">
 
+            <div class="ibox-content">
+                <div class="table-responsive">
+                    <table class="table table-striped" >
+                        <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>嵌入日期</th>
+                            <th>源节点</th>
+                            <th>目标节点</th>
+                            <th>用户</th>
+                            <th>水印编号</th>
+                            <th>水印内容</th>
+                            <th>备注</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $list as $key=>$value}
+                        <tr>
+                            <td>{$key+1}</td>
+                            <td>{$value.embedTime}</td>
+                            <td>{$value.sourceNodeName}</td>
+                            <td>{$value.destNodeName}</td>
+                            <td>{$value.userName}</td>
+                            <td>{$value.watermarkIndex}</td>
+                            <td>{$value.watermarkContent}</td>
+                            <td>{$value.remark}</td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                    {$list->render()}
+                </div>
+                <div id="mygraph" style="height: 500px">
+
+                </div>
             </div>
         </div>
     </div>

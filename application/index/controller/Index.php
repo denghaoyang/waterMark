@@ -63,10 +63,10 @@ class Index extends Base
     public function tableGraph($fileGuid){
         $recordModel = new RecordModel();
         //获取文件的节点信息
-        $list = $recordModel->getNodeInfo($fileGuid);
-
+        $list = $recordModel->getInList(null,null,$fileGuid);
         //拼接vis.js的配置参数
         $nodes = [];
+        $nodeList = [];
         $edges = [];
         //整理出节点数据与路线数据
         foreach($list as $key=>$value){
@@ -83,29 +83,92 @@ class Index extends Base
             $edges[$key]['to'] = $value['destNodeGuid'];
             $edges[$key]['style'] = 'arrow';
         }
-        //设置节点配置信息
-        foreach ($nodes as $key=>&$value){
-            if ($key==0){
-                $value['color'] = 'red';
-            }else{
-                if($key%2){
-                    $this->addTotal($nodes,'x',$key);
-                }else{
-                    $this->addTotal($nodes,'y',$key);
-                }
-            }
+
+        //获取节点ID数组
+        foreach ($nodes as $key=>$value){
+            $nodeList[$key] = $value['id'];
         }
+        //将流转信息转为树形结构
+        $tree = $this->arrayToForest($edges,"to","from");
+        $this->getLevel($nodes,$tree,$nodeList);
+
+        //将节点按照层级分类
+        $levelList = [];
+        foreach ($nodes as $value){
+            $levelList[$value['level']][] = $value['id'];
+        }
+        //设置节点配置信息
+        $colorList = ["#7AFEC6","#66B3FF","#FFA042","#FF5151","#CA8EFF","#6FB7B7"];
+        foreach ($nodes as &$value){
+            $value['color'] = $colorList[$value['level']];
+            $value['x'] = 200*$value['level'];
+            $value['y'] = 100*$this->getKey($value['id'],$levelList);
+        }
+        $this->assign("list",$list);
         $this->assign("nodes",json_encode($nodes));
         $this->assign("edges",json_encode($edges));
         return $this->fetch("tablegraph");
     }
 
-    private function addTotal(&$data,$coordinate,$key){
-        foreach ($data as $k=>&$value){
-            if ($key<=$k){
-                $value[$coordinate] += 200;
+    private function getKey($id,$levelList){
+        foreach ($levelList as $value){
+            foreach ($value as $key=>$val){
+                if ($val==$id){
+                    return $key;
+                }
             }
         }
+    }
+
+    private function getLevel(&$data,$tree,$nodeList,$level=0){
+        foreach($tree as $value){
+            $key = array_search($value['from'],$nodeList);
+            $data[$key]['level'] = $level;
+            $key = array_search($value['to'],$nodeList);
+            $data[$key]['level'] = $level+1;
+
+            if (array_key_exists("children",$value)){
+                $this->getLevel($data,$value['children'],$nodeList,++$level);
+            }else{
+                continue;
+            }
+        }
+    }
+
+    /**
+     * $list 数组转化成森林
+     * $pk key
+     * $pid parentId
+     * */
+    private function arrayToForest($list, $pk, $pid, $child = 'children') {
+        $tree = array();
+        if (!is_array($list)) {
+            return $tree;
+        }
+        $refer = array();
+        $parentNodeIdArr = [];
+        foreach ($list as $key => $data) {
+            $refer[$data[$pk]] = &$list[$key];
+            $parentNodeIdArr[$data[$pid]] = $data[$pid];
+        }
+        /* 寻找根结点 */
+        foreach ($list as $key => $data) {
+            if (in_array($data[$pk], $parentNodeIdArr)) {
+                unset($parentNodeIdArr[$data[$pk]]);
+            }
+        }
+        foreach ($list as $key => $data) {
+            $parantId = $data[$pid];
+            if (in_array($parantId, $parentNodeIdArr)) {
+                $tree[] = &$list[$key];
+            } else {
+                if (isset($refer[$parantId])) {
+                    $parent = &$refer[$parantId];
+                    $parent[$child][] = &$list[$key];
+                }
+            }
+        }
+        return $tree;
     }
 
 }
