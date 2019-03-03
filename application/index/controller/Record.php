@@ -44,7 +44,10 @@ class Record extends Controller
                                    $UserGUID=null,
                                    $WatermarkIndex=null,
                                    $WatermarkContent=null,
-                                   $Remark=null)
+                                   $Remark=null,
+                                   $status=null,
+                                   $type=null,
+                                   $byte=null)
     {
         if ($GUID==null){
             $result['status'] = 0;
@@ -95,6 +98,9 @@ class Record extends Controller
             $data['watermarkIndex'] = $WatermarkIndex;
             $data['watermarkContent'] = $WatermarkContent;
             $data['remark'] = $Remark;
+            $data['status'] = $status;
+            $data['type'] = $type;
+            $data['byte'] = $byte;
             $data['addtime'] = time();
 
             $status = $recordModel->saveList($data);

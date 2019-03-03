@@ -71,10 +71,11 @@
     var container = document.getElementById('mygraph');
     var data= {
         nodes: nodes,
-        edges: edges,
+        edges: edges
     };
     var options = {
-        height: '400px'
+        height: '400px',
+        dashes:true
     };
     var graph = new vis.Graph(container, data, options);
 </script>

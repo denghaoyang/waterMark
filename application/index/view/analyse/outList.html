@@ -1,0 +1,161 @@
+<!-- orris -->
+<link href="/static/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>当日水印提取数量汇总</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">{$count}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>当日水印嵌提取数量环比分析</h5>
+                        </div>
+                        <div class="ibox-content font-bold text-navy">
+                            {if condition="$count>=$yesterdayCount"}
+                            <h1 class="no-margins"><i class="fa fa-level-up"></i>
+                                {$yesterdayCount!=0 ? round((($count-$yesterdayCount)/$yesterdayCount),3)*100 : 0}%
+                            </h1>
+                            {else/}
+                            <h1 class="no-margins"><i class="fa fa-level-down"></i>
+                                {$yesterdayCount!=0 ? round((($yesterdayCount-$count)/$yesterdayCount),3)*100 : 0}%
+                            </h1>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>当日水印提取的文件字节数汇总</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">{$byteCount}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>当日水印嵌提取数量环比分析</h5>
+                        </div>
+                        <div class="ibox-content font-bold text-navy">
+                            {if condition="$count>=$yesterdayCount"}
+                            <h1 class="no-margins"><i class="fa fa-level-up"></i>
+                                {$yesterdayCount!=0 ? round((($count-$yesterdayCount)/$yesterdayCount),3)*100 : 0}%
+                            </h1>
+                            {else/}
+                            <h1 class="no-margins"><i class="fa fa-level-down"></i>
+                                {$yesterdayCount!=0 ? round((($yesterdayCount-$count)/$yesterdayCount),3)*100 : 0}%
+                            </h1>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>水印提取状态统计图</h5>
+                    <div class="ibox-tools">
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="flot-chart">
+                        <div class="flot-chart-pie-content" id="flot-pie-chart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>日水印提取数量统计图</h5>
+                    <div class="ibox-tools">
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div id="morris-one-line-chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Flot -->
+<script src="/static/js/plugins/flot/jquery.flot.js"></script>
+<script src="/static/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+<script src="/static/js/plugins/flot/jquery.flot.resize.js"></script>
+<script src="/static/js/plugins/flot/jquery.flot.pie.js"></script>
+<script src="/static/js/plugins/flot/jquery.flot.time.js"></script>
+
+<!-- Morris -->
+<script src="/static/js/plugins/morris/raphael-2.1.0.min.js"></script>
+<script src="/static/js/plugins/morris/morris.js"></script>
+
+
+<script type="text/javascript">
+    //饼图
+    $(function() {
+
+        var data = {$pieTableJson};
+
+        $.plot($("#flot-pie-chart"), data, {
+            series: {
+                pie: {
+                    show: true
+                }
+            },
+            grid: {
+                hoverable: true
+            },
+            tooltip: true,
+            tooltipOpts: {
+                content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
+                shifts: {
+                    x: 20,
+                    y: 0
+                },
+                defaultTheme: false
+            }
+        });
+
+    });
+
+    //折线图
+    $(function() {
+        Morris.Line({
+            element: 'morris-one-line-chart',
+            data: {$lineTableJson},
+            xkey: 'day',
+            ykeys: ['value'],
+            resize: true,
+            lineWidth:4,
+            labels: ['Value'],
+            lineColors: ['#1ab394'],
+            pointSize:5
+        });
+    });
+
+</script>
