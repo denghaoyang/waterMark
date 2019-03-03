@@ -48,7 +48,7 @@
                             {foreach $list as $key=>$value}
                             <tr>
                                 <td>{$key+1}</td>
-                                <td>{$value.embedTime}</td>
+                                <td>{:date('Y-m-d',strtotime($value['embedTime']))}</td>
                                 <td><a href="/index/index/tableGraph?fileGuid={$value.fileGuid}">{$value.fileGuid}</a></td>
                                 <td>{$value.sourceNodeName}</td>
                                 <td>{$value.destNodeName}</td>

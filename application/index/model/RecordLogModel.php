@@ -16,7 +16,7 @@ class RecordLogModel extends Model
     // 设置当前模型对应的完整数据表名称
     protected $table = 'wt_record_log';
 
-    public function getOutList($startTime,$endTime,$fileGuid){
+    public function getOutList($startTime,$endTime,$fileGuid,$type){
         $map = [];
         $map['n.is_del'] = 0;
         $map['n1.is_del'] = 0;
@@ -29,12 +29,15 @@ class RecordLogModel extends Model
         if($fileGuid){
             $map['r.fileGuid'] = (int)$fileGuid;
         }
+        if ($type){
+            $map['r.type'] = $type;
+        }
         return $this->alias("rl")
             ->join("wt_record r","rl.recordId=r.guid")
             ->join("wt_node n","r.sourceNodeGuid = n.guid")
             ->join("wt_node n1","r.destNodeGuid = n1.guid")
             ->join("wt_user u","r.userGuid = u.guid")
-            ->field("r.guid,r.fileGuid,n.name as sourceNodeName,n1.name as destNodeName,u.name as userName,r.watermarkContent,r.watermarkIndex,r.remark,rl.addtime")
+            ->field("r.guid,r.fileGuid,,r.type,n.name as sourceNodeName,n1.name as destNodeName,u.name as userName,r.watermarkContent,r.watermarkIndex,r.remark,rl.addtime")
             ->order("addtime desc")
             ->where($map)
             ->paginate(10,false,['query'=> ['startTime'=>$startTime,'endTime'=>$endTime,'fileGuid'=>$fileGuid]]);

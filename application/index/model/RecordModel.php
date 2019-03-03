@@ -35,7 +35,7 @@ class RecordModel extends Model
             ])->save($data);
     }
 
-    public function getInList($startTime,$endTime,$fileGuid){
+    public function getInList($startTime,$endTime,$fileGuid,$type){
         $map = [];
         $map['n.is_del'] = 0;
         $map['n1.is_del'] = 0;
@@ -48,12 +48,15 @@ class RecordModel extends Model
         if($fileGuid){
             $map['r.fileGuid'] = (int)$fileGuid;
         }
+        if ($type){
+            $map['r.type'] = $type;
+        }
         return $this->alias("r")
                     ->join("wt_node n","r.sourceNodeGuid = n.guid")
                     ->join("wt_node n1","r.destNodeGuid = n1.guid")
                     ->join("wt_user u","r.userGuid = u.guid")
-                    ->field("r.guid,r.fileGuid,r.embedTime,r.sourceNodeGuid,r.destNodeGuid,n.name as sourceNodeName,n1.name as destNodeName,u.name as userName,r.watermarkContent,r.watermarkIndex,r.remark,r.addtime")
-                    ->order("addtime desc")
+                    ->field("r.guid,r.type,r.fileGuid,r.embedTime,r.sourceNodeGuid,r.destNodeGuid,n.name as sourceNodeName,n1.name as destNodeName,u.name as userName,r.watermarkContent,r.watermarkIndex,r.remark,r.addtime")
+                    ->order("embedTime desc")
                     ->where($map)
                     ->paginate(10);
     }
