@@ -73,7 +73,7 @@ class Analyse extends Base{
     }
 
     public function changeData(){
-        $recordLogModel = new RecordLogModel();
+        $recordLogModel = new RecordModel();
         $recordLogModel->saveData();
     }
 

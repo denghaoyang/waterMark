@@ -6,19 +6,43 @@ use app\index\controller\Base;
 use app\index\model\RecordModel;
 use app\index\model\RecordLogModel;
 use app\index\model\UserModel;
+use app\index\model\NodeModel;
 use think\Session;
 
 class Index extends Base
 {
     public function index(){
+        //获取节点信息
+        $nodeModel = new NodeModel();
+        $nodeList = $nodeModel->where('is_del',0)->select();
+
+        $nodeJson = [];
+        $edgeJson = [];
+        foreach($nodeList as $key=>$value){
+            $nodeJson[] = ['id'=>12+$key,'label'=>$value['name'],'shape'=>'box','color'=>'#F85858'];
+            $edgeJson[] = ['from'=>8,'to'=>12+$key,'style'=>'arrow'];
+        }
+
+        //格式化json字符串
+        $nodeJson = json_encode($nodeJson);
+        $nodeJson = substr($nodeJson,1);
+        $nodeJson = substr($nodeJson,0,strlen($nodeJson)-1);
+
+        $edgeJson = json_encode($edgeJson);
+        $edgeJson = substr($edgeJson,1);
+        $edgeJson = substr($edgeJson,0,strlen($edgeJson)-1);
+
+        $this->assign('nodeJson',$nodeJson);
+        $this->assign('edgeJson',$edgeJson);
+
         return $this->fetch();
     }
 
     //水印嵌入记录
-    public function inList($startTime=null,$endTime=null,$fileGuid=null){
+    public function inList($startTime=null,$endTime=null,$fileGuid=null,$type=null){
         $recordModel = new RecordModel();
 
-        $list = $recordModel->getInList($startTime,$endTime,$fileGuid);
+        $list = $recordModel->getInList($startTime,$endTime,$fileGuid,$type);
 
         $this->assign("list",$list);
         $this->assign("startTime",$startTime);
@@ -28,10 +52,10 @@ class Index extends Base
     }
 
     //水印导出记录
-    public function outList($startTime=null,$endTime=null,$fileGuid=null){
+    public function outList($startTime=null,$endTime=null,$fileGuid=null,$type=null){
         $recordLogModel = new RecordLogModel();
 
-        $list = $recordLogModel->getOutList($startTime,$endTime,$fileGuid);
+        $list = $recordLogModel->getOutList($startTime,$endTime,$fileGuid,$type);
 
         $this->assign("list",$list);
         $this->assign("startTime",$startTime);
@@ -63,7 +87,7 @@ class Index extends Base
     public function tableGraph($fileGuid){
         $recordModel = new RecordModel();
         //获取文件的节点信息
-        $list = $recordModel->getInList(null,null,$fileGuid);
+        $list = $recordModel->getInList(null,null,$fileGuid,null);
         //拼接vis.js的配置参数
         $nodes = [];
         $nodeList = [];
@@ -89,6 +113,7 @@ class Index extends Base
             $nodeList[$key] = $value['id'];
         }
         //将流转信息转为树形结构
+        // 不可以出现节点A->A/A->B,B->A
         $tree = $this->arrayToForest($edges,"to","from");
         $this->getLevel($nodes,$tree,$nodeList);
 

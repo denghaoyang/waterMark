@@ -29,7 +29,7 @@ class RecordLogModel extends Model
         if($fileGuid){
             $map['r.fileGuid'] = (int)$fileGuid;
         }
-        if ($type){
+        if ($type!=null){
             $map['r.type'] = $type;
         }
         return $this->alias("rl")
@@ -37,7 +37,7 @@ class RecordLogModel extends Model
             ->join("wt_node n","r.sourceNodeGuid = n.guid")
             ->join("wt_node n1","r.destNodeGuid = n1.guid")
             ->join("wt_user u","r.userGuid = u.guid")
-            ->field("r.guid,r.fileGuid,,r.type,n.name as sourceNodeName,n1.name as destNodeName,u.name as userName,r.watermarkContent,r.watermarkIndex,r.remark,rl.addtime")
+            ->field("r.guid,r.fileGuid,r.type,n.name as sourceNodeName,n1.name as destNodeName,u.name as userName,r.watermarkContent,r.watermarkIndex,r.remark,rl.addtime")
             ->order("addtime desc")
             ->where($map)
             ->paginate(10,false,['query'=> ['startTime'=>$startTime,'endTime'=>$endTime,'fileGuid'=>$fileGuid]]);

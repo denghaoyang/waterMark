@@ -48,7 +48,7 @@ class RecordModel extends Model
         if($fileGuid){
             $map['r.fileGuid'] = (int)$fileGuid;
         }
-        if ($type){
+        if ($type!=null){
             $map['r.type'] = $type;
         }
         return $this->alias("r")
@@ -105,23 +105,27 @@ class RecordModel extends Model
         return json_encode($result);
     }
 
+    //清理重复的节点数据
     public function saveData(){
-        //循环插入数据
-        for ($x=7; $x<=210; $x++){
-            $data['guid'] = $x;
-            $data['fileGuid'] = rand(1,30);
-            $data['embedTime'] = date("Y-m-d H:i",strtotime("2019-02-03 +".mt_rand(1,30)."days +2 hours"));
-            $data['sourceNodeGuid'] = rand(1,11);
-            $data['destNodeGuid'] = rand(1,11);
-            $data['userGuid'] = rand(1,7);
-            $data['watermarkIndex'] = rand(1,100);
-            $data['watermarkContent'] =  rand(1,100);
-            $data['addtime'] = time();
-            $data['status'] = rand(0,2);
-            $data['type'] = rand(0,1);
-            $data['byte'] = rand(0,1024);
-            $this->insert($data);
-        }
-        echo  "success";
+//        $fileGuids = $this->group("fileGuid")->column("fileGuid");
+//        foreach($fileGuids as $fileGuid){
+//            $recordList = $this->where('fileGuid',$fileGuid)->select();
+//            foreach ($recordList as $value){
+//                if ($value['sourceNodeGuid'] == $value['destNodeGuid']){
+//                    $value['destNodeGuid'] = rand(1,30);
+//                    $this->update($value->toArray(),['id'=>$value['id']]);
+//                }
+//                $map = [];
+//                $map['sourceNodeGuid'] = $value['destNodeGuid'];
+//                $map['destNodeGuid'] = $value['sourceNodeGuid'];
+//                $map['fileGuid'] = $value['fileGuid'];
+//                $list = $this->where($map)->find();
+//                if($list){
+//                    $value['destNodeGuid'] = rand(1,30);
+//                    $this->update($value->toArray(),['id'=>$value['id']]);
+//                }
+//            }
+//        }
+        echo "success";
     }
 }

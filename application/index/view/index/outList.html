@@ -11,6 +11,12 @@
                 <div class="ibox-content">
                     <form enctype="multipart/form-data" method="post" action="/index/index/outList">
                         <div class="row">
+                            <div class="col-sm-2 m-b-xs">
+                                <select class="input-sm form-control input-s-sm inline" style="height: 31px" name="type">
+                                    <option value="0">标准数据</option>
+                                    <option value="1">成果数据</option>
+                                </select>
+                            </div>
                             <div class="col-sm-3 m-b-xs">
                                 <label>提取时间范围</label>
                                 <div class="form-group" id="data_5">
@@ -41,6 +47,7 @@
                                     <th>用户</th>
                                     <th>水印编号</th>
                                     <th>水印内容</th>
+                                    <th>数据类型</th>
                                     <th>备注</th>
                                 </tr>
                                 </thead>
@@ -55,6 +62,7 @@
                                     <td>{$value.userName}</td>
                                     <td>{$value.watermarkIndex}</td>
                                     <td>{$value.watermarkContent}</td>
+                                    <td>{$value['type']?'成果数据':'标准数据'}</td>
                                     <td>{$value.remark}</td>
                                 </tr>
                                 {/foreach}
