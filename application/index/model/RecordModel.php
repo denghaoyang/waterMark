@@ -91,9 +91,9 @@ class RecordModel extends Model
         $map['embedTime'] = ['between',"$lastMonth,$today"];
 
         $result = [];
-        $result[] = ['label'=>"嵌入成功",'color'=>'#bababa','data'=>$this->where($map)->where(['status'=>0])->count()];
-        $result[] = ['label'=>"待嵌入",'color'=>'#79d2c0','data'=>$this->where($map)->where(['status'=>1])->count()];
-        $result[] = ['label'=>"取消嵌入",'color'=>'#1ab394','data'=>$this->where($map)->where(['status'=>2])->count()];
+        $result[] = ['label'=>"嵌入成功",'color'=>'#1ab394','data'=>$this->where($map)->where(['status'=>0])->count()];
+        $result[] = ['label'=>"待嵌入",'color'=>'#bababa','data'=>$this->where($map)->where(['status'=>1])->count()];
+        $result[] = ['label'=>"取消嵌入",'color'=>'#016AE8','data'=>$this->where($map)->where(['status'=>2])->count()];
 
         return json_encode($result);
     }
@@ -107,10 +107,10 @@ class RecordModel extends Model
 
     public function saveData(){
         //循环插入数据
-        for ($x=7; $x<=210; $x++){
+        for ($x=210; $x<=250; $x++){
             $data['guid'] = $x;
             $data['fileGuid'] = rand(1,30);
-            $data['embedTime'] = date("Y-m-d H:i",strtotime("2019-02-03 +".mt_rand(1,30)."days +2 hours"));
+            $data['embedTime'] = date("Y-m-d H:i",strtotime("2019-03-12 +".mt_rand(1,30)."days +2 hours"));
             $data['sourceNodeGuid'] = rand(1,11);
             $data['destNodeGuid'] = rand(1,11);
             $data['userGuid'] = rand(1,7);

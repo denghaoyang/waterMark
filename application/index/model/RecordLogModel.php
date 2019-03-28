@@ -37,7 +37,7 @@ class RecordLogModel extends Model
             ->join("wt_node n","r.sourceNodeGuid = n.guid")
             ->join("wt_node n1","r.destNodeGuid = n1.guid")
             ->join("wt_user u","r.userGuid = u.guid")
-            ->field("r.guid,r.fileGuid,,r.type,n.name as sourceNodeName,n1.name as destNodeName,u.name as userName,r.watermarkContent,r.watermarkIndex,r.remark,rl.addtime")
+            ->field("r.guid,r.fileGuid,r.type,n.name as sourceNodeName,n1.name as destNodeName,u.name as userName,r.watermarkContent,r.watermarkIndex,r.remark,rl.addtime")
             ->order("addtime desc")
             ->where($map)
             ->paginate(10,false,['query'=> ['startTime'=>$startTime,'endTime'=>$endTime,'fileGuid'=>$fileGuid]]);
@@ -59,9 +59,9 @@ class RecordLogModel extends Model
         $map['rl.addtime'] = ['between',"$lastMonth,$today"];
 
         $result = [];
-        $result[] = ['label'=>"嵌入成功",'color'=>'#bababa','data'=>$this->alias("rl")->join("wt_record r",'r.guid=rl.recordId')->where($map)->where(['r.status'=>0])->count()];
-        $result[] = ['label'=>"待嵌入",'color'=>'#79d2c0','data'=>$this->alias("rl")->join("wt_record r",'r.guid=rl.recordId')->where($map)->where(['r.status'=>1])->count()];
-        $result[] = ['label'=>"取消嵌入",'color'=>'#1ab394','data'=>$this->alias("rl")->join("wt_record r",'r.guid=rl.recordId')->where($map)->where(['r.status'=>2])->count()];
+        $result[] = ['label'=>"嵌入成功",'color'=>'#1ab394','data'=>$this->alias("rl")->join("wt_record r",'r.guid=rl.recordId')->where($map)->where(['r.status'=>0])->count()];
+        $result[] = ['label'=>"待嵌入",'color'=>'#bababa','data'=>$this->alias("rl")->join("wt_record r",'r.guid=rl.recordId')->where($map)->where(['r.status'=>1])->count()];
+        $result[] = ['label'=>"取消嵌入",'color'=>'#016AE8','data'=>$this->alias("rl")->join("wt_record r",'r.guid=rl.recordId')->where($map)->where(['r.status'=>2])->count()];
 
         return json_encode($result);
     }
@@ -76,13 +76,13 @@ class RecordLogModel extends Model
     public function saveData(){
         $recordModel = new RecordModel();
 
-        $list = $recordModel->select();
+        $list = $recordModel->where("id > 211")->select();
 
         foreach ($list as $value){
-            $i = rand(1,10);
+            $i = rand(1,4);
             for ($x=0;$x<$i;$x++){
                 $data['recordId'] = $value['guid'];
-                $data['addtime'] = strtotime("2019-02-03 +".mt_rand(1,30)."days +2 hours");
+                $data['addtime'] = strtotime("2019-03-10 +".mt_rand(1,10)."days +2 hours");
                 $this->insert($data);
             }
         }
