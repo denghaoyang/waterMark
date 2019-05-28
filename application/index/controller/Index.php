@@ -87,7 +87,7 @@ class Index extends Base
     public function tableGraph($fileGuid){
         $recordModel = new RecordModel();
         //获取文件的节点信息
-        $list = $recordModel->getInList(null,null,$fileGuid);
+        $list = $recordModel->getInList(null,null,$fileGuid,null);
         //拼接vis.js的配置参数
         $nodes = [];
         $nodeList = [];
@@ -113,9 +113,9 @@ class Index extends Base
             $nodeList[$key] = $value['id'];
         }
         //将流转信息转为树形结构
+        // 不可以出现节点A->A/A->B,B->A
         $tree = $this->arrayToForest($edges,"to","from");
         $this->getLevel($nodes,$tree,$nodeList);
-
         //将节点按照层级分类
         $levelList = [];
         foreach ($nodes as $value){

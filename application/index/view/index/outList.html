@@ -12,7 +12,6 @@
                     <form enctype="multipart/form-data" method="post" action="/index/index/outList">
                         <div class="row">
                             <div class="col-sm-2 m-b-xs">
-                                <label>数据类型</label>
                                 <select class="input-sm form-control input-s-sm inline" style="height: 31px" name="type">
                                     <option value="0">标准数据</option>
                                     <option value="1">成果数据</option>
@@ -57,7 +56,7 @@
                                 <tr>
                                     <td>{$key+1}</td>
                                     <td>{:date("Y-m-d",$value.addtime)}</td>
-                                    <td><a href="/index/index/tableGraph?fileGuid={$value.fileGuid}">{$value.fileGuid}</a></td>
+                                    <td><a href="/index/index/tableGraph?fileGuid={$value.guid}">{$value.guid}</a></td>
                                     <td>{$value.sourceNodeName}</td>
                                     <td>{$value.destNodeName}</td>
                                     <td>{$value.userName}</td>

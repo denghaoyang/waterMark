@@ -1,0 +1,17 @@
+html {
+	min-width: 375px;
+}
+
+.logo-img {
+    width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+    .navbar-header {
+        display: block;
+    }
+    .navbar-right {
+        float: right;
+    }
+}
+

@@ -29,7 +29,7 @@ class RecordLogModel extends Model
         if($fileGuid){
             $map['r.fileGuid'] = (int)$fileGuid;
         }
-        if ($type){
+        if ($type!=null){
             $map['r.type'] = $type;
         }
         return $this->alias("rl")

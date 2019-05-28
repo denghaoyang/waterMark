@@ -26,7 +26,7 @@
                         {foreach $list as $key=>$value}
                         <tr>
                             <td>{$key+1}</td>
-                            <td>{$value.embedTime}</td>
+                            <td>{:date('Y-m-d',strtotime($value['embedTime']))}</td>
                             <td>{$value.sourceNodeName}</td>
                             <td>{$value.destNodeName}</td>
                             <td>{$value.userName}</td>
@@ -75,7 +75,10 @@
     };
     var options = {
         height: '400px',
-        dashes:true
+        dashes:true,
+        interaction:{
+            zoomView:false
+        }
     };
     var graph = new vis.Graph(container, data, options);
 </script>
